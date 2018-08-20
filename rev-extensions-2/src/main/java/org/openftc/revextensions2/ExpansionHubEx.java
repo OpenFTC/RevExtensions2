@@ -209,6 +209,7 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
      * @return Current draw in milliamps.
      * @deprecated This feature currently does not work (likely a bug in the Expansion Hub firmware).
      */
+    @Deprecated
     public synchronized double getServoBusCurrentDraw()
     {
         LynxGetADCCommand.Channel channel = LynxGetADCCommand.Channel.SERVO_CURRENT;
@@ -388,11 +389,9 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
 
     /***
      * Control whether or not the Lynx Module's phone charging function is enabled
-     * @deprecated because this seems to lock up the Hub internally and crash the SDK
      *
      * @param chargeEnabled true for enabled, false for disabled
      */
-    @Deprecated
     public synchronized void setPhoneChargeEnabled(boolean chargeEnabled)
     {
         LynxPhoneChargeControlCommand controlCommand = new LynxPhoneChargeControlCommand(expansionHub, chargeEnabled);
