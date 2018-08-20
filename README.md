@@ -20,6 +20,15 @@ The successor to REV Extensions
  - Enable or disable phone charging
  - Setting servo pulse width directly in microseconds
  - Reading certain data in bulk from the Hub (can increase your control loop speed)
+     
+     The following data can be read in one go:
+
+     - All 4 encoder counts
+     - All 4 encoder velocities
+     - All digital pins
+     - All all analog pins
+     - Is motor at target position for all 4 motors
+
  - Query whether a motor has "lost counts" [ **broken:** no idea what this actually does ]
  - Query for which firmware version the Hub has installed
  - Query for which hardware revision the Hub is
