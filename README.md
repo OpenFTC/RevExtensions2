@@ -23,3 +23,7 @@ The successor to REV Extensions
  - Query whether a motor has "lost counts" [ **broken:** no idea what this actually does ]
  - Query for which firmware version the Hub has installed
  - Query for which hardware revision the Hub is
+
+## Ok now that I've installed it, how do I use this?
+
+Please see the [examples](examples/src/main/java/org/openftc/revextensions2/examples) folder. More detailed documentation coming soon.
