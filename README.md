@@ -4,6 +4,11 @@ The successor to REV Extensions
 
 **NOTE: an OpenRC-based SDK is NOT required to use this**
 
+### DISCLAIMER:
+
+Use this at your own risk. **The OpenFTC team will not be responsible if using these extra features causes the SDK to implode and you lose F-3 at worlds.**
+That being said, I used a few of these features in competition this past season without any issues.
+
 ## What extra functionality does this add to the SDK?
 
  - Setting the LED color on the Hub
