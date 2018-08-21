@@ -2,6 +2,8 @@
 
 The successor to REV Extensions
 
+**NOTE: an OpenRC-based SDK is NOT required to use this**
+
 ## What extra functionality does this add to the SDK?
 
  - Setting the LED color on the Hub
@@ -32,6 +34,40 @@ The successor to REV Extensions
  - Query whether a motor has "lost counts" [ **broken:** no idea what this actually does ]
  - Query for which firmware version the Hub has installed
  - Query for which hardware revision the Hub is
+
+## How do I install this?
+
+1. Open your FTC SDK Android Studio project
+2. Open the `build.common.gradle` file:
+
+    ![img-her](doc/images/build-common-gradle.png)
+
+3. Add `jcenter()` to the `repositories` block at the bottom:
+
+    ![img-her](doc/images/jcenter.png)
+
+4. Open the `build.gradle` file for the TeamCode module:
+
+    ![img-her](doc/images/teamcode-gradle.png)
+
+5. At the bottom, add this:
+
+        dependencies {
+            compile 'org.openftc:rev-extensions-2:1.0'
+         }
+
+    When you've done that, the bottom of the file should look like this:
+
+    ![img-her](doc/images/gradledepend.png)
+
+6. Now perform a Gradle Sync:
+
+    ![img-her](doc/images/gradle-sync.png)
+
+7. Wait for Gradle to finish gradling
+
+8. Congratulations! You are now ready to use the new features provided by REV Extensions 2!
+
 
 ## Ok now that I've installed it, how do I use this?
 
