@@ -4,9 +4,11 @@ The successor to REV Extensions
 
 **NOTE: an OpenRC-based SDK is NOT required to use this**
 
+**NOTE: scroll down for installation instructions**
+
 ### DISCLAIMER:
 
-Use this at your own risk. **The OpenFTC team will not be responsible if using these extra features causes the SDK to implode and you lose F-3 at worlds.**
+Use this at your own risk. **You accept the possibility that using these extra features may cause the SDK to implode and cause you lose F-3 at worlds.**
 That being said, I used a few of these features in competition this past season without any issues.
 
 ## What extra functionality does this add to the SDK?
