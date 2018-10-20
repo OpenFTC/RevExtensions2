@@ -210,15 +210,19 @@ public class RevBulkData
 
         try
         {
-            Field field = AnalogInput.class.getDeclaredField("controller");
-            field.setAccessible(true);
-            controller = (AnalogInputController) field.get(input);
+            Field controllerField = AnalogInput.class.getDeclaredField("controller");
+            controllerField.setAccessible(true);
+            controller = (AnalogInputController) controllerField.get(input);
 
-            Field field2 = AnalogInput.class.getDeclaredField("channel");
-            field2.setAccessible(true);
-            port = (int) field2.get(input);
+            Field channelField = AnalogInput.class.getDeclaredField("channel");
+            channelField.setAccessible(true);
+            port = (int) channelField.get(input);
         }
-        catch (Exception ignored){}
+        catch (Exception e)
+        {
+            throw new RevBulkDataException("Failed to reflect on AnalogInput. This probably means"
+                    + "that you're running a newer version of the SDK than I tested with and the Tech Team broke something :(");
+        }
 
         if(!(controller instanceof LynxAnalogInputController))
         {
@@ -269,15 +273,19 @@ public class RevBulkData
 
         try
         {
-            Field field = DigitalChannelImpl.class.getDeclaredField("controller");
-            field.setAccessible(true);
-            controller = (DigitalChannelController) field.get(digitalChannel);
+            Field controllerField = DigitalChannelImpl.class.getDeclaredField("controller");
+            controllerField.setAccessible(true);
+            controller = (DigitalChannelController) controllerField.get(digitalChannel);
 
-            Field field2 = DigitalChannelImpl.class.getDeclaredField("channel");
-            field2.setAccessible(true);
-            port = (int) field2.get(digitalChannel);
+            Field channelField = DigitalChannelImpl.class.getDeclaredField("channel");
+            channelField.setAccessible(true);
+            port = (int) channelField.get(digitalChannel);
         }
-        catch (Exception ignored){}
+        catch (Exception e)
+        {
+            throw new RevBulkDataException("Failed to reflect on DigitalChannelImpl. This probably means"
+            + "that you're running a newer version of the SDK then I tested with and the Tech Team broke something :(");
+        }
 
         if(!(controller instanceof LynxDigitalChannelController))
         {
