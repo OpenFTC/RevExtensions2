@@ -79,3 +79,9 @@ That being said, I used a few of these features in competition this past season 
 ## Ok now that I've installed it, how do I use this?
 
 Please see the [examples](examples/src/main/java/org/openftc/revextensions2/examples) folder. More detailed documentation coming soon.
+
+## Changelog
+
+### v1.0
+
+ - Initial release
