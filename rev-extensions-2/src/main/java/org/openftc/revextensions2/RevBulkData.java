@@ -30,9 +30,13 @@ import com.qualcomm.hardware.lynx.commands.core.LynxGetBulkInputDataResponse;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogInputController;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DigitalChannelController;
 import com.qualcomm.robotcore.hardware.DigitalChannelImpl;
+import com.qualcomm.robotcore.hardware.configuration.MotorConfigurationType;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
 
 import java.lang.reflect.Field;
 
@@ -61,6 +65,21 @@ public class RevBulkData
     {
         this.response = response;
         this.module = module;
+    }
+
+    // see DcMotorImpl#getOperationalDirection()
+    private static DcMotorSimple.Direction getMotorOperationalDirection(DcMotor dcMotor)
+    {
+        MotorConfigurationType motorType = dcMotor.getMotorType();
+        DcMotorSimple.Direction direction = dcMotor.getDirection();
+        if (motorType.getOrientation() == Rotation.CCW)
+        {
+            return direction.inverted();
+        }
+        else
+        {
+            return direction;
+        }
     }
 
     //-----------------------------------------------------------------------------------
@@ -96,7 +115,15 @@ public class RevBulkData
     public int getMotorCurrentPosition(DcMotor motor)
     {
         throwIfMotorInvalid(motor);
-        return getMotorCurrentPosition(motor.getPortNumber());
+        int position = getMotorCurrentPosition(motor.getPortNumber());
+        if (getMotorOperationalDirection(motor) == DcMotorSimple.Direction.REVERSE)
+        {
+            return -position;
+        }
+        else
+        {
+            return position;
+        }
     }
 
     //-----------------------------------------------------------------------------------
@@ -132,7 +159,15 @@ public class RevBulkData
     public int getMotorVelocity(DcMotor motor)
     {
         throwIfMotorInvalid(motor);
-        return getMotorVelocity(motor.getPortNumber());
+        int velocity = getMotorVelocity(motor.getPortNumber());
+        if (getMotorOperationalDirection(motor) == DcMotorSimple.Direction.REVERSE)
+        {
+            return -velocity;
+        }
+        else
+        {
+            return velocity;
+        }
     }
 
     //-----------------------------------------------------------------------------------
