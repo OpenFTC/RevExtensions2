@@ -88,7 +88,11 @@ public class RevBulkData
 
     /***
      * Get the encoder count of a motor port on the Expansion Hub
-     * from which this bulk data response came
+     * from which this bulk data response came. Please note that
+     * the sign of the value will NOT be adjusted for whether or
+     * not the motor was set to reverse mode; for that please use
+     * the corresponding method that takes a DcMotor parameter
+     * instead of the raw port number.
      *
      * @param motorNum the motor port for which to get the
      *                 encoder count [0-3]
@@ -106,6 +110,8 @@ public class RevBulkData
      * Expansion Hub from which this bulk data packet came. If the
      * user passes in a motor that is connected to a different Hub
      * than the one that this packet came from, an exception is thrown
+     * Additionally, the sign of the value is adjusted to account for
+     * whether the user set the motor direction to reverse.
      *
      * @param motor the motor for which to retrieve the encoder count
      *
@@ -132,7 +138,11 @@ public class RevBulkData
 
     /***
      * Get the encoder velocity of a motor port on the Expansion Hub
-     * from which this bulk data response came
+     * from which this bulk data response came. Please note that
+     * the sign of the value will NOT be adjusted for whether or
+     * not the motor was set to reverse mode; for that please use
+     * the corresponding method that takes a DcMotor parameter
+     * instead of the raw port number.
      *
      * @param motorNum the motor port for which to get the
      *                 encoder velocity [0-3]
@@ -150,6 +160,8 @@ public class RevBulkData
      * Expansion Hub from which this bulk data packet came. If the
      * user passes in a motor that is connected to a different Hub
      * than the one that this packet came from, an exception is thrown
+     * Additionally, the sign of the value is adjusted to account for
+     * whether the user set the motor direction to reverse.
      *
      * @param motor the motor for which to retrieve the encoder velocity
      *
