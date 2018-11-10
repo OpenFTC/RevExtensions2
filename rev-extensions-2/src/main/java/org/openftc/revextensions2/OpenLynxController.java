@@ -56,18 +56,9 @@ class OpenLynxController extends LynxCommExceptionHandler
             lynxModule = (LynxModule) getModule_method.invoke(controller);
             enhancedLynxModule = new ExpansionHubEx(lynxModule);
         }
-
-        catch (NoSuchMethodException e)
+        catch (Exception e)
         {
-            RobotLog.ee("OpenFTC", e, "Failed to reflect module from OpenLynxController. No such method.");
-        }
-        catch (IllegalAccessException e)
-        {
-            RobotLog.ee("OpenFTC", e, "Failed to reflect module from OpenLynxController. Illegal access.");
-        }
-        catch (InvocationTargetException e)
-        {
-            RobotLog.ee("OpenFTC", e, "Failed to reflect module from OpenLynxController. Illegal invocation target.");
+            throw new RE2Exception("Failed to reflect on LynxController!");
         }
     }
 

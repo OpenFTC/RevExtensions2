@@ -21,12 +21,14 @@
 
 package org.openftc.revextensions2;
 
-class RevBulkDataException extends RE2Exception
+class RE2Exception extends RuntimeException
 {
-    RevBulkDataException(){}
+    private static String techTeamBroke = " This probably means that you're running a newer version of the SDK then I tested with and the Tech Team broke something :(";
 
-    RevBulkDataException(String msg)
+    RE2Exception(){}
+
+    RE2Exception(String msg)
     {
-        super(msg);
+        super(msg + techTeamBroke);
     }
 }
