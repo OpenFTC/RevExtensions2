@@ -30,7 +30,9 @@ import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.ServoConfigurationType;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -209,9 +211,10 @@ class Utils
                 {
                     map.servo.put(entry.getKey(),
                             new ServoImplEx(
-                                    entry.getValue().getController(),
+                                    (ServoControllerEx)entry.getValue().getController(),
                                     entry.getValue().getPortNumber(),
-                                    entry.getValue().getDirection()));
+                                    entry.getValue().getDirection(),
+                                    ServoConfigurationType.getStandardServoType()));
                 }
             }
         }
