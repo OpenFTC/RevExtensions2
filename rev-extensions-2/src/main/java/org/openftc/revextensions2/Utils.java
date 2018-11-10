@@ -61,187 +61,212 @@ class Utils
     {
         HardwareMap map = getHardwareMap();
 
-        //-----------------------------------------------------------------------------------
-        // Motors
-        //-----------------------------------------------------------------------------------
-        {   //An extra set of brackets so that it's impossible to screw things up for other swaps with a copy & paste error
-
-            ArrayList<Map.Entry<String, DcMotor>> motorsToRecreateAsLynx = new ArrayList<>();
-
-            // TODO: Process both map.dcMotor and the root map.
-            for(Map.Entry<String, DcMotor> entry : map.dcMotor.entrySet())
-            {
-                if(!(entry.getValue() instanceof ExpansionHubMotor)
-                        && entry.getValue() instanceof DcMotorEx
-                        && entry.getValue().getController() instanceof LynxDcMotorController)
-                {
-                    motorsToRecreateAsLynx.add(entry);
-                }
-            }
-
-            if(!motorsToRecreateAsLynx.isEmpty())
-            {
-                for(Map.Entry<String, DcMotor> entry : motorsToRecreateAsLynx)
-                {
-                    map.dcMotor.remove(entry.getKey());
-                }
-
-                for(Map.Entry<String, DcMotor> entry : motorsToRecreateAsLynx)
-                {
-                    map.dcMotor.put(entry.getKey(), new ExpansionHubMotor(entry.getValue()));
-                }
-            }
-        }
-
-        //-----------------------------------------------------------------------------------
-        // Servos
-        //-----------------------------------------------------------------------------------
-        {   //An extra set of brackets so that it's impossible to screw things up for other swaps with a copy & paste error
-
-            ArrayList<Map.Entry<String, Servo>> servosToRecreateAsLynx = new ArrayList<>();
-
-            // TODO: Process both map.servo and the root map.
-            for(Map.Entry<String, Servo> entry : map.servo.entrySet())
-            {
-                if(!(entry.getValue() instanceof ExpansionHubServo)
-                        && entry.getValue() instanceof ServoImplEx
-                        && entry.getValue().getController() instanceof LynxServoController)
-                {
-                    servosToRecreateAsLynx.add(entry);
-                }
-            }
-
-            if(!servosToRecreateAsLynx.isEmpty())
-            {
-                for(Map.Entry<String, Servo> entry : servosToRecreateAsLynx)
-                {
-                    map.servo.remove(entry.getKey());
-                }
-
-                for(Map.Entry<String, Servo> entry : servosToRecreateAsLynx)
-                {
-                    map.servo.put(entry.getKey(), new ExpansionHubServo(entry.getValue()));
-                }
-            }
-        }
-
-        //-----------------------------------------------------------------------------------
-        // LynxModules
-        //-----------------------------------------------------------------------------------
-        {   //An extra set of brackets so that it's impossible to screw things up for other swaps with a copy & paste error
-
-            HashMap<String, ExpansionHubEx> enhancedLynxModulesToInject = new HashMap<>();
-
-            for(LynxModule module : map.getAll(LynxModule.class))
-            {
-                if(!hwMapContainsEnhancedModule(module))
-                {
-                    enhancedLynxModulesToInject.put(getHwMapName(module), new ExpansionHubEx(module));
-                }
-            }
-
-            for(Map.Entry<String, ExpansionHubEx> entry : enhancedLynxModulesToInject.entrySet())
-            {
-                map.put(entry.getKey(), entry.getValue());
-            }
-        }
+        swapStandardMotorsForLynx(map);
+        swapStandardServosForLynx(map);
+        addExpansionHubExForEachLynxModule(map);
     }
 
     static void deswapHardwareMap()
     {
         HardwareMap map = getHardwareMap();
 
+        deswapLynxMotors(map);
+        deswapLynxServos(map);
+        removeExpansionHubExForEachLynxModule(map);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------------------------------
+    // Swapping
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+
+    private static void swapStandardMotorsForLynx(HardwareMap map)
+    {
         //-----------------------------------------------------------------------------------
-        // Motors
+        // Motors: standard --> Lynx
         //-----------------------------------------------------------------------------------
-        {   //An extra set of brackets so that it's impossible to screw things up for other swaps with a copy & paste error
 
-            ArrayList<Map.Entry<String, DcMotor>> lynxMotorsToRecreateAsStandard = new ArrayList<>();
+        ArrayList<Map.Entry<String, DcMotor>> motorsToRecreateAsLynx = new ArrayList<>();
 
-            for(Map.Entry<String, DcMotor> entry : map.dcMotor.entrySet())
+        // TODO: Process both map.dcMotor and the root map.
+        for (Map.Entry<String, DcMotor> entry : map.dcMotor.entrySet())
+        {
+            if (!(entry.getValue() instanceof ExpansionHubMotor)
+                    && entry.getValue() instanceof DcMotorEx
+                    && entry.getValue().getController() instanceof LynxDcMotorController)
             {
-                if(entry.getValue() instanceof ExpansionHubMotor)
-                {
-                    lynxMotorsToRecreateAsStandard.add(entry);
-                }
-            }
-
-            if(!lynxMotorsToRecreateAsStandard.isEmpty())
-            {
-                for(Map.Entry<String, DcMotor> entry : lynxMotorsToRecreateAsStandard)
-                {
-                    map.dcMotor.remove(entry.getKey());
-                }
-
-                for(Map.Entry<String, DcMotor> entry : lynxMotorsToRecreateAsStandard)
-                {
-                    map.dcMotor.put(entry.getKey(),
-                            new DcMotorImplEx(
-                                    entry.getValue().getController(),
-                                    entry.getValue().getPortNumber(),
-                                    entry.getValue().getDirection(),
-                                    entry.getValue().getMotorType()));
-                }
+                motorsToRecreateAsLynx.add(entry);
             }
         }
 
-        //-----------------------------------------------------------------------------------
-        // Servos
-        //-----------------------------------------------------------------------------------
-        {   //An extra set of brackets so that it's impossible to screw things up for other swaps with a copy & paste error
-
-            ArrayList<Map.Entry<String, Servo>> lynxServosToRecreateAsStandard = new ArrayList<>();
-
-            for(Map.Entry<String, Servo> entry : map.servo.entrySet())
+        if (!motorsToRecreateAsLynx.isEmpty())
+        {
+            for (Map.Entry<String, DcMotor> entry : motorsToRecreateAsLynx)
             {
-                if(entry.getValue() instanceof ExpansionHubServo)
-                {
-                    lynxServosToRecreateAsStandard.add(entry);
-                }
+                map.dcMotor.remove(entry.getKey());
             }
 
-            if(!lynxServosToRecreateAsStandard.isEmpty())
+            for (Map.Entry<String, DcMotor> entry : motorsToRecreateAsLynx)
             {
-                for(Map.Entry<String, Servo> entry : lynxServosToRecreateAsStandard)
-                {
-                    map.servo.remove(entry.getKey());
-                }
-
-                for(Map.Entry<String, Servo> entry : lynxServosToRecreateAsStandard)
-                {
-                    map.servo.put(entry.getKey(),
-                            new ServoImplEx(
-                                    (ServoControllerEx)entry.getValue().getController(),
-                                    entry.getValue().getPortNumber(),
-                                    entry.getValue().getDirection(),
-                                    ServoConfigurationType.getStandardServoType()));
-                }
-            }
-        }
-
-
-
-        //-----------------------------------------------------------------------------------
-        // LynxModules
-        //-----------------------------------------------------------------------------------
-        {   //An extra set of brackets so that it's impossible to screw things up for other swaps with a copy & paste error
-
-            HashMap<String, ExpansionHubEx> enhancedLynxModulesToRemove = new HashMap<>();
-
-            for(ExpansionHubEx module : map.getAll(ExpansionHubEx.class))
-            {
-                enhancedLynxModulesToRemove.put(getHwMapName(module), module);
-            }
-
-            if(!enhancedLynxModulesToRemove.isEmpty())
-            {
-                for(Map.Entry<String, ExpansionHubEx> entry : enhancedLynxModulesToRemove.entrySet())
-                {
-                    map.remove(entry.getKey(), entry.getValue());
-                }
+                map.dcMotor.put(entry.getKey(), new ExpansionHubMotor(entry.getValue()));
             }
         }
     }
+
+    private static void swapStandardServosForLynx(HardwareMap map)
+    {
+        //-----------------------------------------------------------------------------------
+        // Servos: standard --> Lynx
+        //-----------------------------------------------------------------------------------
+
+        ArrayList<Map.Entry<String, Servo>> servosToRecreateAsLynx = new ArrayList<>();
+
+        // TODO: Process both map.servo and the root map.
+        for (Map.Entry<String, Servo> entry : map.servo.entrySet())
+        {
+            if (!(entry.getValue() instanceof ExpansionHubServo)
+                    && entry.getValue() instanceof ServoImplEx
+                    && entry.getValue().getController() instanceof LynxServoController)
+            {
+                servosToRecreateAsLynx.add(entry);
+            }
+        }
+
+        if (!servosToRecreateAsLynx.isEmpty())
+        {
+            for (Map.Entry<String, Servo> entry : servosToRecreateAsLynx)
+            {
+                map.servo.remove(entry.getKey());
+            }
+
+            for (Map.Entry<String, Servo> entry : servosToRecreateAsLynx)
+            {
+                map.servo.put(entry.getKey(), new ExpansionHubServo(entry.getValue()));
+            }
+        }
+    }
+
+    private static void addExpansionHubExForEachLynxModule(HardwareMap map)
+    {
+        //-----------------------------------------------------------------------------------
+        // LynxModules --+> ExpansionHubEx
+        //-----------------------------------------------------------------------------------
+
+        HashMap<String, ExpansionHubEx> enhancedLynxModulesToInject = new HashMap<>();
+
+        for (LynxModule module : map.getAll(LynxModule.class))
+        {
+            if (!hwMapContainsEnhancedModule(module))
+            {
+                enhancedLynxModulesToInject.put(getHwMapName(module), new ExpansionHubEx(module));
+            }
+        }
+
+        for (Map.Entry<String, ExpansionHubEx> entry : enhancedLynxModulesToInject.entrySet())
+        {
+            map.put(entry.getKey(), entry.getValue());
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------------------------------
+    // Deswapping
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+
+    private static void deswapLynxMotors(HardwareMap map)
+    {
+        //-----------------------------------------------------------------------------------
+        // Motors: Lynx --> standard
+        //-----------------------------------------------------------------------------------
+
+        ArrayList<Map.Entry<String, DcMotor>> lynxMotorsToRecreateAsStandard = new ArrayList<>();
+
+        for (Map.Entry<String, DcMotor> entry : map.dcMotor.entrySet())
+        {
+            if (entry.getValue() instanceof ExpansionHubMotor)
+            {
+                lynxMotorsToRecreateAsStandard.add(entry);
+            }
+        }
+
+        if (!lynxMotorsToRecreateAsStandard.isEmpty())
+        {
+            for (Map.Entry<String, DcMotor> entry : lynxMotorsToRecreateAsStandard)
+            {
+                map.dcMotor.remove(entry.getKey());
+            }
+
+            for (Map.Entry<String, DcMotor> entry : lynxMotorsToRecreateAsStandard)
+            {
+                map.dcMotor.put(entry.getKey(),
+                        new DcMotorImplEx(
+                                entry.getValue().getController(),
+                                entry.getValue().getPortNumber(),
+                                entry.getValue().getDirection(),
+                                entry.getValue().getMotorType()));
+            }
+        }
+
+    }
+
+    private static void deswapLynxServos(HardwareMap map)
+    {
+        //-----------------------------------------------------------------------------------
+        // Servos: Lynx --> standard
+        //-----------------------------------------------------------------------------------
+
+        ArrayList<Map.Entry<String, Servo>> lynxServosToRecreateAsStandard = new ArrayList<>();
+
+        for (Map.Entry<String, Servo> entry : map.servo.entrySet())
+        {
+            if (entry.getValue() instanceof ExpansionHubServo)
+            {
+                lynxServosToRecreateAsStandard.add(entry);
+            }
+        }
+
+        if (!lynxServosToRecreateAsStandard.isEmpty())
+        {
+            for (Map.Entry<String, Servo> entry : lynxServosToRecreateAsStandard)
+            {
+                map.servo.remove(entry.getKey());
+            }
+
+            for (Map.Entry<String, Servo> entry : lynxServosToRecreateAsStandard)
+            {
+                map.servo.put(entry.getKey(),
+                        new ServoImplEx(
+                                (ServoControllerEx) entry.getValue().getController(),
+                                entry.getValue().getPortNumber(),
+                                entry.getValue().getDirection(),
+                                ServoConfigurationType.getStandardServoType()));
+            }
+        }
+    }
+
+    private static void removeExpansionHubExForEachLynxModule(HardwareMap map)
+    {
+        //-----------------------------------------------------------------------------------
+        // Remove ExpHbExs
+        //-----------------------------------------------------------------------------------
+
+        HashMap<String, ExpansionHubEx> enhancedLynxModulesToRemove = new HashMap<>();
+
+        for (ExpansionHubEx module : map.getAll(ExpansionHubEx.class))
+        {
+            enhancedLynxModulesToRemove.put(getHwMapName(module), module);
+        }
+
+        if (!enhancedLynxModulesToRemove.isEmpty())
+        {
+            for (Map.Entry<String, ExpansionHubEx> entry : enhancedLynxModulesToRemove.entrySet())
+            {
+                map.remove(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------------------------------
+    // Misc.
+    //-------------------------------------------------------------------------------------------------------------------------------------------
 
     static String getHwMapName(HardwareDevice device)
     {
@@ -252,6 +277,7 @@ class Utils
     {
         for(ExpansionHubEx enhancedModule : getHardwareMap().getAll(ExpansionHubEx.class))
         {
+            //TODO: can we just replace with an '=='?
             if(module.getModuleAddress() == enhancedModule.getStandardModule().getModuleAddress())
             {
                 return true;

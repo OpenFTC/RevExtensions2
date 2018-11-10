@@ -398,6 +398,7 @@ public class RevBulkData
      */
     private boolean validateLynxModule(LynxModule moduleToValidate)
     {
+        //TODO: can we just replace with an '=='?
         return moduleToValidate.getModuleAddress() == module.getModuleAddress();
     }
 }
