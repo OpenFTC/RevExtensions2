@@ -268,7 +268,7 @@ public class RevBulkData
         catch (Exception e)
         {
             throw new RevBulkDataException("Failed to reflect on AnalogInput. This probably means"
-                    + "that you're running a newer version of the SDK than I tested with and the Tech Team broke something :(");
+                    + " that you're running a newer version of the SDK than I tested with and the Tech Team broke something :(");
         }
 
         if(!(controller instanceof LynxAnalogInputController))
@@ -331,7 +331,7 @@ public class RevBulkData
         catch (Exception e)
         {
             throw new RevBulkDataException("Failed to reflect on DigitalChannelImpl. This probably means"
-            + "that you're running a newer version of the SDK then I tested with and the Tech Team broke something :(");
+            + " that you're running a newer version of the SDK then I tested with and the Tech Team broke something :(");
         }
 
         if(!(controller instanceof LynxDigitalChannelController))
