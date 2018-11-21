@@ -21,12 +21,7 @@
 
 package org.openftc.revextensions2;
 
-/**
- * This exception is thrown if the user tries to access data from a RevBulkData object that
- * was received from a different LynxModule than the one that the bulk command was issued to.
- */
-
-class RevBulkDataException extends RuntimeException
+class RevBulkDataException extends RE2Exception
 {
     RevBulkDataException(){}
 

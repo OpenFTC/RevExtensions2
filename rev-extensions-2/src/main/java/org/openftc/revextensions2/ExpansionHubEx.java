@@ -457,7 +457,9 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
      */
     public synchronized double getMotorCurrentDraw(int port)
     {
-        LynxGetADCCommand.Channel channel;
+        LynxConstants.validateMotorZ(port);
+
+        LynxGetADCCommand.Channel channel = null;
 
         if (port == 0)
         {
@@ -474,10 +476,6 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         else if (port == 3)
         {
             channel = LynxGetADCCommand.Channel.MOTOR3_CURRENT;
-        }
-        else
-        {
-            return 0; // TODO: Should we handle an invalid port with a crash?
         }
 
         LynxGetADCCommand command = new LynxGetADCCommand(expansionHub, channel, LynxGetADCCommand.Mode.ENGINEERING);

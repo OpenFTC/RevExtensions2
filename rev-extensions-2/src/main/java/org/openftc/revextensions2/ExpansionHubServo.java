@@ -22,7 +22,9 @@ package org.openftc.revextensions2;
 
 import com.qualcomm.hardware.lynx.LynxController;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.ServoConfigurationType;
 
 /**
  * Extends a ServoImplEx to provide access to new features.
@@ -39,7 +41,12 @@ public class ExpansionHubServo extends ServoImplEx
      */
     ExpansionHubServo(Servo servo)
     {
-        super(servo.getController(), servo.getPortNumber(), servo.getDirection());
+        super(
+                (ServoControllerEx)servo.getController(),
+                servo.getPortNumber(),
+                servo.getDirection(),
+                ServoConfigurationType.getStandardServoType());
+
         this.controller = new OpenLynxController((LynxController) servo.getController());
     }
 

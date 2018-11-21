@@ -75,7 +75,7 @@ public class CurrentMonitorsExample extends OpMode
         telemetry.addData("M0 current", motor0.getCurrentDraw());
         telemetry.addData("M1 current", motor1.getCurrentDraw());
         telemetry.addData("M2 current", motor2.getCurrentDraw());
-        telemetry.addData("M0 current", motor3.getCurrentDraw());
+        telemetry.addData("M3 current", motor3.getCurrentDraw());
 
         telemetry.update();
     }
