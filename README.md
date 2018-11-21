@@ -2,6 +2,8 @@
 
 The successor to REV Extensions
 
+**NOTE: SDK v4.x is required to use this**
+
 **NOTE: an OpenRC-based SDK is NOT required to use this**
 
 **NOTE: scroll down for installation instructions**
@@ -81,6 +83,15 @@ That being said, I used a few of these features in competition this past season 
 Please see the [examples](examples/src/main/java/org/openftc/revextensions2/examples) folder. More detailed documentation coming soon.
 
 ## Changelog
+
+### v1.1
+
+ - Fix compatibility with SDK v4.x (due to API breaking changes, older versions of the SDK are no longer supported)
+ - Fix `RevBulkData.getMotorCurrentPosition()` and `RevBulkData.getMotorVelocity()` to return the value signed to be consistent with `DcMotor.getMotorCurrentPosition()` and `DcMotorEx.getVelocity()`
+ - Correct typo in `CurrentMonitorsExample.java`
+ - Don't ignore reflection exceptions
+ - Add JavaDoc comments to `RevBulkData.java`
+ - Refactor hotswapping slightly
 
 ### v1.0
 
