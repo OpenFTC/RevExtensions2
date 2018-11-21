@@ -62,7 +62,8 @@ That being said, I used a few of these features in competition this past season 
 5. At the bottom, add this:
 
         dependencies {
-            compile 'org.openftc:rev-extensions-2:1.0'
+            //NOTE: this is the correct version, the below screenshot is outdated
+            compile 'org.openftc:rev-extensions-2:1.1'
          }
 
     When you've done that, the bottom of the file should look like this:
