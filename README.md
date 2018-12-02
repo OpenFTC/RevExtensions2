@@ -1,7 +1,5 @@
 # RevExtensions2
 
-The successor to REV Extensions
-
 **NOTE: SDK v4.x is required to use this**
 
 **NOTE: an OpenRC-based SDK is NOT required to use this**
