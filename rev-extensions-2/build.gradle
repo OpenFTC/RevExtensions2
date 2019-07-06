@@ -30,7 +30,9 @@ android {
 }
 
 dependencies {
-    compileOnly fileTree(include: ['*.aar'], dir: '../libs')
+    //compileOnly fileTree(include: ['*.aar'], dir: '../libs')
+    compileOnly 'org.openftc:hardware-stock:5.0'
+    compileOnly 'org.openftc:robotcore-stock:5.0'
 }
 
 apply from: '../release-aar.gradle'

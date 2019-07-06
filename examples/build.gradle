@@ -21,6 +21,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.aar'], dir: '../libs')
-    implementation project(':rev-extensions-2')
+    //implementation fileTree(include: ['*.aar'], dir: '../libs')
+    compileOnly 'org.openftc:hardware-stock:5.0'
+    compileOnly 'org.openftc:robotcore-stock:5.0'
+    compileOnly project(':rev-extensions-2')
 }
