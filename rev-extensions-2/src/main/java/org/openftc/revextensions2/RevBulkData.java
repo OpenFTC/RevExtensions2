@@ -384,7 +384,7 @@ public class RevBulkData
      */
     private boolean validateLynxController(LynxController controller)
     {
-        return validateLynxModule(new OpenLynxController(controller).getLynxModule());
+        return validateLynxModule(Utils.getLynxFromController(controller));
     }
 
     /***

@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.ServoConfigu
 
 public class ExpansionHubServo extends ServoImplEx
 {
-    private OpenLynxController controller;
+    private ExpansionHubEx expansionHubEx;
 
     /*
      * Don't use this constructor in user-code; this object will be
@@ -47,7 +47,7 @@ public class ExpansionHubServo extends ServoImplEx
                 servo.getDirection(),
                 ServoConfigurationType.getStandardServoType());
 
-        this.controller = new OpenLynxController((LynxController) servo.getController());
+        expansionHubEx = new ExpansionHubEx(Utils.getLynxFromController((LynxController) servo.getController()));
     }
 
     /***
@@ -58,6 +58,6 @@ public class ExpansionHubServo extends ServoImplEx
      */
     public void setPulseWidthUs(int uS)
     {
-        controller.getEnhancedLynxModule().setServoPulseWidth(getPortNumber(), uS);
+        expansionHubEx.setServoPulseWidth(getPortNumber(), uS);
     }
 }

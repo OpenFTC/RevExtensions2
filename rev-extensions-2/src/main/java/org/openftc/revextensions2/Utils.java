@@ -21,6 +21,7 @@
 
 package org.openftc.revextensions2;
 
+import com.qualcomm.hardware.lynx.LynxController;
 import com.qualcomm.hardware.lynx.LynxDcMotorController;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.lynx.LynxServoController;
@@ -37,6 +38,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.ServoConfigu
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -285,5 +287,41 @@ class Utils
         }
 
         return false;
+    }
+
+    static LynxModule getLynxFromController(LynxController controller)
+    {
+        /*
+         * NOTE: Historically we invoked the getModule() method
+         * rather than grabbing the field directly. However, this
+         * was reported to be causing problems in the wild because
+         * getModule() actually returns a "PretendLynxModule" if
+         * its internal "isHooked" boolean is false (as can happen
+         * during a disconnect). This caused the cast to LynxModule
+         * to fail and crashed the user code with an RE2Exception.
+         *
+         * See https://github.com/OpenFTC/RevExtensions2/issues/6
+         */
+
+        // We can get the underlying LynxModule object through a
+        // LynxController object, but only through reflection.
+        Field moduleField;
+
+        try
+        {
+            // The "module" field is located within the LynxController class
+            moduleField = LynxController.class.getDeclaredField("module");
+
+            // Ensures the field is accessible for the next line. We still catch
+            // the (impossible) IllegalAccessException just to be safe.
+            moduleField.setAccessible(true);
+
+            // Actually get the value from the controller that was passed in.
+            return (LynxModule) moduleField.get(controller);
+        }
+        catch (Exception e)
+        {
+            throw new RE2Exception("Failed to reflect on LynxController!");
+        }
     }
 }

@@ -31,7 +31,7 @@ import com.qualcomm.robotcore.hardware.DcMotorImplEx;
  */
 public class ExpansionHubMotor extends DcMotorImplEx
 {
-    private OpenLynxController controller;
+    private ExpansionHubEx expansionHubEx;
 
     /*
      * Don't use this constructor in user-code; this object will be
@@ -40,7 +40,7 @@ public class ExpansionHubMotor extends DcMotorImplEx
     ExpansionHubMotor(DcMotor motor)
     {
         super(motor.getController(), motor.getPortNumber(), motor.getDirection(), motor.getMotorType());
-        this.controller = new OpenLynxController((LynxController) motor.getController());
+        expansionHubEx = new ExpansionHubEx(Utils.getLynxFromController((LynxController) motor.getController()));
     }
 
     /**
@@ -50,7 +50,7 @@ public class ExpansionHubMotor extends DcMotorImplEx
      */
     public double getCurrentDraw()
     {
-        return controller.getEnhancedLynxModule().getMotorCurrentDraw(getPortNumber());
+        return expansionHubEx.getMotorCurrentDraw(getPortNumber());
     }
 
     /***
@@ -60,7 +60,7 @@ public class ExpansionHubMotor extends DcMotorImplEx
      */
     public boolean isBridgeOverTemp()
     {
-        return controller.getEnhancedLynxModule().isMotorBridgeOverTemp(getPortNumber());
+        return expansionHubEx.isMotorBridgeOverTemp(getPortNumber());
     }
 
     /***
@@ -72,6 +72,6 @@ public class ExpansionHubMotor extends DcMotorImplEx
     @Deprecated
     public boolean hasLostCounts()
     {
-        return controller.getEnhancedLynxModule().hasMotorLostCounts(getPortNumber());
+        return expansionHubEx.hasMotorLostCounts(getPortNumber());
     }
 }
