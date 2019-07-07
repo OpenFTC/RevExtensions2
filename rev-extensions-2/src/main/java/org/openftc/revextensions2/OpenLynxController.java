@@ -24,10 +24,8 @@ package org.openftc.revextensions2;
 import com.qualcomm.hardware.lynx.LynxCommExceptionHandler;
 import com.qualcomm.hardware.lynx.LynxController;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.util.RobotLog;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 
 /**
  * Wraps a LynxController to provide access to the underlying LynxModule.
@@ -39,21 +37,33 @@ class OpenLynxController extends LynxCommExceptionHandler
 
     OpenLynxController(LynxController controller)
     {
+        /*
+         * NOTE: Historically we invoked the getModule() method
+         * rather than grabbing the field directly. However, this
+         * was reported to be causing problems in the wild because
+         * getModule() actually returns a "PretendLynxModule" if
+         * its internal "isHooked" boolean is false (as can happen
+         * during a disconnect). This caused the cast to LynxModule
+         * to fail and crashed the user code with an RE2Exception.
+         *
+         * See https://github.com/OpenFTC/RevExtensions2/issues/6
+         */
+
         // We can get the underlying LynxModule object through a
         // LynxController object, but only through reflection.
-        Method getModule_method;
+        Field moduleField;
 
         try
         {
-            // The "getModule" method is located within the LynxController class
-            getModule_method = LynxController.class.getDeclaredMethod("getModule");
+            // The "module" field is located within the LynxController class
+            moduleField = LynxController.class.getDeclaredField("module");
 
-            // Ensures the method is accessible for the next line. We still catch
+            // Ensures the field is accessible for the next line. We still catch
             // the (impossible) IllegalAccessException just to be safe.
-            getModule_method.setAccessible(true);
+            moduleField.setAccessible(true);
 
             // Actually get the value from the controller that was passed in.
-            lynxModule = (LynxModule) getModule_method.invoke(controller);
+            lynxModule = (LynxModule) moduleField.get(controller);
             enhancedLynxModule = new ExpansionHubEx(lynxModule);
         }
         catch (Exception e)
