@@ -554,7 +554,7 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
 
         String inputstring = expansionHub.getFirmwareVersionString();
 
-        if(inputstring.equals("unknown firmware"))
+        if(inputstring.equals("unknown firmware") || inputstring.equals("firmware version unavailable"))
         {
             return inputstring;
         }
@@ -577,7 +577,7 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
 
         String inputstring = expansionHub.getFirmwareVersionString();
 
-        if(inputstring.equals("unknown firmware"))
+        if(inputstring.equals("unknown firmware") || inputstring.equals("firmware version unavailable"))
         {
             return -1;
         }
