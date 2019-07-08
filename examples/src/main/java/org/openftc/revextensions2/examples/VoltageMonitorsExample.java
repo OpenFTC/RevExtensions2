@@ -25,7 +25,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.openftc.revextensions2.ExpansionHubEx;
-import org.openftc.revextensions2.RevExtensions2;
 
 @TeleOp(group = "RevExtensions2Examples")
 public class VoltageMonitorsExample extends OpMode
@@ -36,13 +35,11 @@ public class VoltageMonitorsExample extends OpMode
     public void init()
     {
         /*
-         * Call this ONCE as the first thing in each of your OpModes
-         */
-        RevExtensions2.init();
-
-        /*
-         * Now that RevExtensions2.init() has been called, there are new objects in the
-         * hardwareMap :)
+         * Before init() was called on this user code, REV Extensions 2
+         * was notified via OpModeManagerNotifier.Notifications and
+         * it automatically took care of initializing the new objects
+         * in the hardwaremap for you. Historically, you would have
+         * needed to call RevExtensions2.init()
          */
         expansionHub = hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 2");
     }
