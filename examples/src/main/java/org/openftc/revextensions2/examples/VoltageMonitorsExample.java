@@ -59,8 +59,8 @@ public class VoltageMonitorsExample extends OpMode
                         "**********************************\n";
         telemetry.addLine(header);
 
-        telemetry.addData("5v monitor", expansionHub.read5vMonitor() / 1000d); //Voltage from the phone
-        telemetry.addData("12v monitor", expansionHub.read12vMonitor() / 1000d); //Battery voltage
+        telemetry.addData("5v monitor", expansionHub.read5vMonitor(ExpansionHubEx.VoltageUnits.VOLTS)); //Voltage from the phone
+        telemetry.addData("12v monitor", expansionHub.read12vMonitor(ExpansionHubEx.VoltageUnits.VOLTS)); //Battery voltage
         telemetry.update();
     }
 }

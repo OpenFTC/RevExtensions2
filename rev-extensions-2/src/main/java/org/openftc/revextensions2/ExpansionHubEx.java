@@ -183,18 +183,35 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         }
     }
 
+    public enum CurrentDrawUnits
+    {
+        MILLIAMPS,
+        AMPS
+    }
+
     /**
      * Get the total current draw for the entire Expansion Hub.
      *
-     * @return Current draw in milliamps.
+     * @param units the units to return the current draw in
+     * @return Current draw for the entire Expansion Hub
      */
-    public synchronized double getTotalModuleCurrentDraw()
+    public synchronized double getTotalModuleCurrentDraw(CurrentDrawUnits units)
     {
         LynxGetADCCommand command = new LynxGetADCCommand(expansionHub, LynxGetADCCommand.Channel.BATTERY_CURRENT, LynxGetADCCommand.Mode.ENGINEERING);
         try
         {
             LynxGetADCResponse response = command.sendReceive();
-            return response.getValue();
+
+            int ma = response.getValue();
+
+            if(units == CurrentDrawUnits.MILLIAMPS)
+            {
+                return ma;
+            }
+            else if(units == CurrentDrawUnits.AMPS)
+            {
+                return ma/1000d;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {
@@ -206,11 +223,12 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
     /**
      * Get the current draw for the servo bus.
      *
-     * @return Current draw in milliamps.
+     * @param units the units to return the current draw in
+     * @return Current draw of the servo bus
      * @deprecated This feature currently does not work (likely a bug in the Expansion Hub firmware).
      */
     @Deprecated
-    public synchronized double getServoBusCurrentDraw()
+    public synchronized double getServoBusCurrentDraw(CurrentDrawUnits units)
     {
         LynxGetADCCommand.Channel channel = LynxGetADCCommand.Channel.SERVO_CURRENT;
 
@@ -218,8 +236,17 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         try
         {
             LynxGetADCResponse response = command.sendReceive();
+
             int ma = response.getValue();
-            return ma;
+
+            if(units == CurrentDrawUnits.MILLIAMPS)
+            {
+                return ma;
+            }
+            else if(units == CurrentDrawUnits.AMPS)
+            {
+                return ma/1000d;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {
@@ -231,9 +258,10 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
     /***
      * Get the total current draw for the GPIO bus
      *
-     * @return current draw in milliamps
+     * @param units the units to return the current draw in
+     * @return current draw of the GPIO bus
      */
-    public synchronized double getGpioBusCurrentDraw()
+    public synchronized double getGpioBusCurrentDraw(CurrentDrawUnits units)
     {
         LynxGetADCCommand.Channel channel = LynxGetADCCommand.Channel.GPIO_CURRENT;
 
@@ -241,8 +269,17 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         try
         {
             LynxGetADCResponse response = command.sendReceive();
+
             int ma = response.getValue();
-            return ma;
+
+            if(units == CurrentDrawUnits.MILLIAMPS)
+            {
+                return ma;
+            }
+            else if(units == CurrentDrawUnits.AMPS)
+            {
+                return ma/1000d;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {
@@ -254,9 +291,10 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
     /***
      * Get the total current draw for the I2C bus
      *
-     * @return the current draw in milliamps
+     * @param units the units to return the current draw in
+     * @return the current draw of the I2C bus
      */
-    public synchronized double getI2cBusCurrentDraw()
+    public synchronized double getI2cBusCurrentDraw(CurrentDrawUnits units)
     {
         LynxGetADCCommand.Channel channel = LynxGetADCCommand.Channel.I2C_BUS_CURRENT;
 
@@ -264,7 +302,17 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         try
         {
             LynxGetADCResponse response = command.sendReceive();
-            return response.getValue();
+
+            int ma = response.getValue();
+
+            if(units == CurrentDrawUnits.MILLIAMPS)
+            {
+                return ma;
+            }
+            else if(units == CurrentDrawUnits.AMPS)
+            {
+                return ma/1000d;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {
@@ -273,12 +321,19 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         return 0;
     }
 
+    public enum VoltageUnits
+    {
+        MILLIVOLTS,
+        VOLTS
+    }
+
     /***
      * Get the voltage reported by the Hub's 5v rail monitor
      *
-     * @return the voltage in milliamps
+     * @param units the units to return the voltage in
+     * @return the voltage reported by the Hub's 5v monitor
      */
-    public synchronized double read5vMonitor()
+    public synchronized double read5vMonitor(VoltageUnits units)
     {
         LynxGetADCCommand.Channel channel = LynxGetADCCommand.Channel.FIVE_VOLT_MONITOR;
 
@@ -286,7 +341,17 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         try
         {
             LynxGetADCResponse response = command.sendReceive();
-            return response.getValue();
+
+            int mv = response.getValue();
+
+            if(units == VoltageUnits.MILLIVOLTS)
+            {
+                return mv;
+            }
+            else if(units == VoltageUnits.VOLTS)
+            {
+                return mv/1000d;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {
@@ -298,9 +363,10 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
     /***
      * Get the voltage reported by the Hub's 12v rail monitor
      *
-     * @return the voltage in milliamps
+     * @param units the units to return the voltage in
+     * @return the voltage reported by the Hub's 12v monitor
      */
-    public synchronized double read12vMonitor()
+    public synchronized double read12vMonitor(VoltageUnits units)
     {
         LynxGetADCCommand.Channel channel = LynxGetADCCommand.Channel.BATTERY_MONITOR;
 
@@ -308,7 +374,17 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         try
         {
             LynxGetADCResponse response = command.sendReceive();
-            return response.getValue();
+
+            int mv = response.getValue();
+
+            if(units == VoltageUnits.MILLIVOLTS)
+            {
+                return mv;
+            }
+            else if(units == VoltageUnits.VOLTS)
+            {
+                return mv/1000d;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {
@@ -317,12 +393,19 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         return 0;
     }
 
+    public enum TemperatureUnits
+    {
+        CELSIUS,
+        FAHRENHEIT
+    }
+
     /***
      * Get the temperature reported by the Hub's internal temperature sensor
      *
-     * @return the temperature in unknown units
+     * @param units the units to return the temperature in
+     * @return the Hub's internal temperature
      */
-    public synchronized double getInternalTemperature()
+    public synchronized double getInternalTemperature(TemperatureUnits units)
     {
         LynxGetADCCommand.Channel channel = LynxGetADCCommand.Channel.CONTROLLER_TEMPERATURE;
 
@@ -330,7 +413,17 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         try
         {
             LynxGetADCResponse response = command.sendReceive();
-            return response.getValue();
+
+            int degC = response.getValue();
+
+            if(units == TemperatureUnits.CELSIUS)
+            {
+                return degC;
+            }
+            else if(units == TemperatureUnits.FAHRENHEIT)
+            {
+                return (degC*(9d/5d)) + 32;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {
@@ -452,10 +545,11 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
     /**
      * Get the amount of current that a given motor is pulling from its H-bridge
      *
+     * @param units the units to return the current draw in
      * @param port the port of the motor in question
      * @return the current draw in milliamps
      */
-    public synchronized double getMotorCurrentDraw(int port)
+    public synchronized double getMotorCurrentDraw(CurrentDrawUnits units, int port)
     {
         LynxConstants.validateMotorZ(port);
 
@@ -483,7 +577,17 @@ public class ExpansionHubEx extends LynxCommExceptionHandler implements Hardware
         try
         {
             LynxGetADCResponse response = command.sendReceive();
-            return response.getValue();
+
+            int ma = response.getValue();
+
+            if(units == CurrentDrawUnits.MILLIAMPS)
+            {
+                return ma;
+            }
+            else if(units == CurrentDrawUnits.AMPS)
+            {
+                return ma/1000d;
+            }
         }
         catch (InterruptedException | RuntimeException | LynxNackException e)
         {

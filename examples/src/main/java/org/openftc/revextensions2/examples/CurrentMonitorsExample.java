@@ -62,17 +62,17 @@ public class CurrentMonitorsExample extends OpMode
         String header =
                         "**********************************\n" +
                         "CURRENT MONITORING EXAMPLE        \n" +
-                        "NOTE: UNITS ARE MILLIAMPS         \n" +
+                        "NOTE: UNITS ARE AMPS              \n" +
                         "**********************************\n";
         telemetry.addLine(header);
 
-        telemetry.addData("Total current", expansionHub.getTotalModuleCurrentDraw());
-        telemetry.addData("I2C current", expansionHub.getI2cBusCurrentDraw());
-        telemetry.addData("GPIO current", expansionHub.getGpioBusCurrentDraw());
-        telemetry.addData("M0 current", motor0.getCurrentDraw());
-        telemetry.addData("M1 current", motor1.getCurrentDraw());
-        telemetry.addData("M2 current", motor2.getCurrentDraw());
-        telemetry.addData("M3 current", motor3.getCurrentDraw());
+        telemetry.addData("Total current", expansionHub.getTotalModuleCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        telemetry.addData("I2C current", expansionHub.getI2cBusCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        telemetry.addData("GPIO current", expansionHub.getGpioBusCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        telemetry.addData("M0 current", motor0.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        telemetry.addData("M1 current", motor1.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        telemetry.addData("M2 current", motor2.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        telemetry.addData("M3 current", motor3.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
 
         telemetry.update();
     }

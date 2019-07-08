@@ -65,7 +65,7 @@ public class TemperatureMonitorsExample extends OpMode
                         "**********************************\n";
         telemetry.addLine(header);
 
-        telemetry.addData("Module temp", expansionHub.getInternalTemperature());
+        telemetry.addData("Module temp", expansionHub.getInternalTemperature(ExpansionHubEx.TemperatureUnits.FAHRENHEIT) + "F");
         telemetry.addData("Module over temp", expansionHub.isModuleOverTemp());
         telemetry.addData("M0 H-bridge over temp", motor0.isBridgeOverTemp());
         telemetry.addData("M1 H-bridge over temp", motor1.isBridgeOverTemp());
