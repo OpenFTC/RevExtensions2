@@ -321,7 +321,7 @@ class Utils
         }
         catch (Exception e)
         {
-            throw new RE2Exception("Failed to reflect on LynxController!");
+            throw new RE2Exception("Failed to reflect on LynxController! Please report this as an issue on the GitHub repository.");
         }
     }
 }

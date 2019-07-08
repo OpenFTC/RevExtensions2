@@ -267,7 +267,7 @@ public class RevBulkData
         }
         catch (Exception e)
         {
-            throw new RevBulkDataException("Failed to reflect on AnalogInput!");
+            throw new RE2Exception("Failed to reflect on AnalogInput! Please report this as an issue on the GitHub repository.");
         }
 
         if(!(controller instanceof LynxAnalogInputController))
@@ -329,7 +329,7 @@ public class RevBulkData
         }
         catch (Exception e)
         {
-            throw new RevBulkDataException("Failed to reflect on DigitalChannelImpl!");
+            throw new RE2Exception("Failed to reflect on DigitalChannelImpl! Please report this as an issue on the GitHub repository.");
         }
 
         if(!(controller instanceof LynxDigitalChannelController))

@@ -23,12 +23,10 @@ package org.openftc.revextensions2;
 
 class RE2Exception extends RuntimeException
 {
-    private static String techTeamBroke = " This probably means that you're running a newer version of the SDK then I tested with and the Tech Team broke something :(";
-
     RE2Exception(){}
 
     RE2Exception(String msg)
     {
-        super(msg + techTeamBroke);
+        super(msg);
     }
 }
