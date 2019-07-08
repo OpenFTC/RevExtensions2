@@ -21,26 +21,39 @@
 
 package org.openftc.revextensions2;
 
+import android.content.Context;
+
+import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerNotifier;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
+import com.qualcomm.robotcore.util.RobotLog;
+
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 
 /***
  * This class manages hotswapping of the hardwareMap
  */
 
-public class RevExtensions2
+class RevExtensions2
 {
+    /*
+     * NOTE: We cannot simply pass `new OpModeNotifications()` inline to the call
+     * to register the listener, because the SDK stores the list of listeners in
+     * a WeakReference set. This causes the object to be garbage collected because
+     * nothing else is holding a reference to it.
+     */
+    private static final OpModeNotifications opModeNotifications = new OpModeNotifications();
 
-    /*@OpModeRegistrar
-    public static void init(OpModeManager manager)
+    /*
+     * By annotating this method with @OpModeRegistrar, it will be called
+     * automatically by the SDK as it is scanning all the classes in the app
+     * (for @Teleop, etc.) on startup.
+     */
+    @OpModeRegistrar
+    public static void setupOpModeListenerOnSdkBoot(Context context, AnnotatedOpModeManager manager)
     {
-        ((OpModeManagerImpl)manager).registerListener(new OpModeNotifications());
-    }*/
-
-    public static void init()
-    {
-        Utils.hotswapHardwareMap();
-        Utils.getOpModeManager().registerListener(new OpModeNotifications());
+        Utils.getOpModeManager().registerListener(opModeNotifications);
     }
 
     private static class OpModeNotifications implements OpModeManagerNotifier.Notifications
@@ -49,12 +62,14 @@ public class RevExtensions2
         public void onOpModePreInit(OpMode opMode)
         {
             /*
-             * I'd LOVE to find a way to register this lister automatically so that we
-             * can hotswap the hardware map here instead of making the user call init(),
-             * but so far I've been unable to find a way to do that.
+             * We only hotswap the hardware map if this is NOT the
+             * "default" (STOP ROBOT) OpMode
              */
-
-            //Utils.hotswapHardwareMap();
+            if(!(opMode instanceof OpModeManagerImpl.DefaultOpMode))
+            {
+                RobotLog.dd("RevExtensions2", "Hotswapping hardware map");
+                Utils.hotswapHardwareMap();
+            }
         }
 
         @Override
@@ -66,8 +81,15 @@ public class RevExtensions2
         @Override
         public void onOpModePostStop(OpMode opMode)
         {
-            Utils.deswapHardwareMap();
-            Utils.getOpModeManager().unregisterListener(this);
+            /*
+             * We only deswap the hardware map if this is NOT the
+             * "default" (STOP ROBOT) OpMode
+             */
+            if(!(opMode instanceof OpModeManagerImpl.DefaultOpMode))
+            {
+                RobotLog.dd("RevExtensions2", "Deswapping hardware map");
+                Utils.deswapHardwareMap();
+            }
         }
     }
 }
