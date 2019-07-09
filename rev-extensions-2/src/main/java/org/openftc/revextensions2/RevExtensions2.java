@@ -48,11 +48,20 @@ class RevExtensions2
     /*
      * By annotating this method with @OpModeRegistrar, it will be called
      * automatically by the SDK as it is scanning all the classes in the app
-     * (for @Teleop, etc.) on startup.
+     * (for @Teleop, etc.) while it is "starting" the robot.
      */
     @OpModeRegistrar
-    public static void setupOpModeListenerOnSdkBoot(Context context, AnnotatedOpModeManager manager)
+    public static void setupOpModeListenerOnStartRobot(Context context, AnnotatedOpModeManager manager)
     {
+        /*
+         * Because this is called every time the robot is "restarted", one
+         * would think that we should have a boolean to check whether we've
+         * already registered this listener to prevent registering duplicate
+         * listeners. However, the OpModeManager that we register with
+         * is a child of FtcEventLoop, and the EventLoop is re-created every
+         * time the robot is "restarted". So thus, we do actually need to
+         * register the listener every time this method is called.
+         */
         Utils.getOpModeManager().registerListener(opModeNotifications);
     }
 
