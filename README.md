@@ -41,6 +41,7 @@ That being said, I used a few of these features in competition this past season 
  - Query whether a motor has "lost counts" [ **broken:** no idea what this actually does ]
  - Query for which firmware version the Hub has installed
  - Query for which hardware revision the Hub is
+ - Convenient `VexMC29` class to prevent the need to manually scale the servo range for the Vex MC29.
 
 ## How do I install this?
 
@@ -61,7 +62,7 @@ That being said, I used a few of these features in competition this past season 
 
         dependencies {
             //NOTE: this is the correct version, the below screenshot is outdated
-            compile 'org.openftc:rev-extensions-2:1.1'
+            compile 'org.openftc:rev-extensions-2:1.2'
          }
 
     When you've done that, the bottom of the file should look like this:
@@ -82,6 +83,14 @@ That being said, I used a few of these features in competition this past season 
 Please see the [examples](examples/src/main/java/org/openftc/revextensions2/examples) folder. More detailed documentation coming soon.
 
 ## Changelog
+
+### v1.2
+
+ - Fix compatibility with SDK v5.x (should still be backwards compatible with v4.x, as the difference was not a compile-time issue)
+ - **Bugfix:** (Issue #6) Prevent possibility of exception when doing bulk reads during disconnect event
+ - Add `VexMC29` class, which scales the normal -1 to 1 CRServo PWM range to the range expected by the MC29.
+ - **API change:** The hardware map is now hotswapped transparently - you no longer need to call `RevExtensions2.init()`
+ - **API change:** Require units as a parameter to get voltage/current/temperature methods
 
 ### v1.1
 
