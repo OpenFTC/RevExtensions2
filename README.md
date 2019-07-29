@@ -1,6 +1,6 @@
 # RevExtensions2
 
-**NOTE: SDK v4.x is required to use this**
+**NOTE: SDK v4.x/5.x is required to use this**
 
 **NOTE: an OpenRC-based SDK is NOT required to use this**
 
