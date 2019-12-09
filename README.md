@@ -62,7 +62,7 @@ That being said, I used a few of these features in competition this past season 
 
         dependencies {
             //NOTE: this is the correct version, the below screenshot is outdated
-            compile 'org.openftc:rev-extensions-2:1.2'
+            implementation 'org.openftc:rev-extensions-2:1.2'
          }
 
     When you've done that, the bottom of the file should look like this:
